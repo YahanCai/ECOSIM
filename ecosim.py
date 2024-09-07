@@ -58,7 +58,13 @@ class Wombat(Animal):
         super().__init__(position, game, width, height, sourceImage, speed, energy)
 
     def update(self, timeElapsed):
-        pass
+        self.energy -= timeElapsed
+        if self.energy <= 0:
+            self.destroy()
+        elif self.energy < 20:
+            pass
+        else:
+            pass
 
 class Snake(Animal):
     def __init__(self, position, game):
@@ -70,7 +76,13 @@ class Snake(Animal):
         super().__init__(position, game, width, height, sourceImage, speed, energy)
     
     def update(self, timeElapsed):
-        pass
+        self.energy -= timeElapsed
+        if self.energy <= 0:
+            self.destroy()
+        elif self.energy < 20:
+            pass
+        else:
+            pass
 
 class EcoSim(Game):
     
