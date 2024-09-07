@@ -16,6 +16,29 @@ class DirtTile(Tile):
     def update(self, timeElapsed):
         pass
 
+class SandTile(Tile):
+    def __init__(self, position, game):
+        super().__init__(position, game, width=96, height=96, sourceImage=ImageLibrary.get('sand_tile'))
+        
+    def update(self, timeElapsed):
+        pass
+
+class Grass(GameObject):
+    def __init__(self, position, game):
+        width = 96
+        height = 96
+        sourceImage = ImageLibrary.get('grass_tuft')  
+        super().__init__(position, width, height, sourceImage, game)
+        self.growth_timer = random.randint(5, 20)
+
+    def update(self, timeElapsed):
+        self.growth_timer -= timeElapsed
+        if self.growth_timer <= 0:
+            self.spread()
+            self.growth_timer = random.randint(5, 20)  
+    def spread(self):
+        pass
+
 class Animal(GameObject):
     def __init__(self, position, game, width, height, sourceImage, speed, energy):
         super().__init__(position, width, height, sourceImage, game)
