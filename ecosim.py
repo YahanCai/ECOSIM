@@ -36,6 +36,24 @@ class Grass(GameObject):
         if self.growth_timer <= 0:
             self.spread()
             self.growth_timer = random.randint(5, 20)  
+    
+    def spread(self):
+        pass
+
+class Flower(GameObject):
+    def __init__(self, position, game):
+        width = 96
+        height = 96
+        sourceImage = ImageLibrary.get('grass_tile')  
+        super().__init__(position, width, height, sourceImage, game)
+        self.growth_timer = random.randint(5, 15)
+
+    def update(self, timeElapsed):
+        self.growth_timer -= timeElapsed
+        if self.growth_timer <= 0:
+            self.spread()
+            self.growth_timer = random.randint(5, 15)  
+    
     def spread(self):
         pass
 
@@ -84,6 +102,24 @@ class Snake(Animal):
         else:
             pass
 
+class Bird(Animal):
+    def __init__(self, position, game):
+        width = 96
+        height = 96
+        sourceImage = ImageLibrary.get('wombat2')
+        speed = 20
+        energy = 60
+        super().__init__(position, game, width, height, sourceImage, speed, energy)
+
+    def update(self, timeElapsed):
+        self.energy -= timeElapsed
+        if self.energy <= 0:
+            self.destroy()
+        elif self.energy < 20:
+            pass
+        else:
+            pass
+
 class EcoSim(Game):
     
     def __init__(self):
@@ -105,6 +141,9 @@ class EcoSim(Game):
         for i in range(5): 
             position = Vector2D(random.randint(0, 11) * 96, random.randint(0, 9) * 96)
             self.animals.append(Snake(position, self))
+        for i in range(6): 
+            position = Vector2D(random.randint(0, 11) * 96, random.randint(0, 9) * 96)
+            self.animals.append(Bird(position, self))
 
 
 def main():
