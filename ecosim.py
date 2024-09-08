@@ -56,6 +56,10 @@ class Flower(GameObject):
     
     def spread(self):
         pass
+    
+class OutOfBoundsException(Exception):
+    def __init__(self, message):
+        super().__init__(message)
 
 class Animal(GameObject):
     def __init__(self, position, game, width, height, sourceImage, speed, energy):
@@ -74,6 +78,17 @@ class Wombat(Animal):
         speed = 10
         energy = 100
         super().__init__(position, game, width, height, sourceImage, speed, energy)
+        self.target = self.selectTarget()
+
+    def selectTarget(self):
+        while True:
+            try:
+                target = Vector2D(random.randint(0,11) * 96, random.randint(0,9) * 96)
+                if target.x < 0 or target.x > 1152 or target.y < 0 or target.y > 984:
+                    raise OutOfBoundsException(f"Target {target} is out of bounds")
+                return target
+            except OutOfBoundsException as e:
+                print(e)
 
     def update(self, timeElapsed):
         self.energy -= timeElapsed
@@ -81,8 +96,12 @@ class Wombat(Animal):
             self.destroy()
         elif self.energy < 20:
             pass
+
         else:
-            pass
+            trajectory = self.target.subtract(self.get_position()).normalize().scale(self.speed * timeElapsed)
+            self.move_by(trajectory.x, trajectory.y)
+            if self.get_position().distance(self.target) < 48:
+                self.target = self.selectTarget()
 
 class Snake(Animal):
     def __init__(self, position, game):
@@ -92,6 +111,17 @@ class Snake(Animal):
         speed = 15
         energy = 80
         super().__init__(position, game, width, height, sourceImage, speed, energy)
+        self.target = self.selectTarget()
+
+    def selectTarget(self):
+        while True:
+            try:
+                target = Vector2D(random.randint(0, 11) * 96, random.randint(0, 9) * 96)
+                if target.x < 0 or target.x > 1152 or target.y < 0 or target.y > 984:
+                    raise OutOfBoundsException(f"Target {target} is out of bounds")
+                return target
+            except OutOfBoundsException as e:
+                print(e)
     
     def update(self, timeElapsed):
         self.energy -= timeElapsed
@@ -99,8 +129,12 @@ class Snake(Animal):
             self.destroy()
         elif self.energy < 20:
             pass
+        
         else:
-            pass
+            trajectory = self.target.subtract(self.get_position()).normalize().scale(self.speed * timeElapsed)
+            self.move_by(trajectory.x, trajectory.y)
+            if self.get_position().distance(self.target) < 48:
+                self.target = self.selectTarget()
 
 class Bird(Animal):
     def __init__(self, position, game):
