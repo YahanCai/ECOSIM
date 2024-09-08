@@ -25,6 +25,20 @@ class DirtTile(Tile):
         if random.random() < 0.5:
             Grass(position, game)
     
+    def add_grass(self):
+        """
+        Adds grass to the dirt tile, indicating that grass is growing on it.
+        """
+        if not self.has_grass:
+            Grass(self.get_position(), self.get_game())
+            self.has_grass = True
+
+    def remove_grass(self):
+        """
+        Removes grass from the dirt tile when eaten or destroyed.
+        """
+        self.has_grass = False
+
     def update(self, timeElapsed):
         """
         Updates the dirt tile over time.
